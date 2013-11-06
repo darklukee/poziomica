@@ -1,0 +1,51 @@
+/*
+ * main.cpp
+ *
+ *  Created on: 12-03-2012
+ *      Author: lukee
+ */
+
+#include "stm32f4xx.h"
+#include "stm32f4xx_conf.h"
+#include "stm32f4_discovery.h"
+
+GPIO_InitTypeDef GPIO_InitStructure;
+
+void Delay(uint32_t licznik)
+{
+	for (uint32_t i = 0; i < licznik; i++)
+	{
+	}
+
+	return;
+}
+
+int main(void)
+{
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
+	/* Configure PD12, PD13, PD14 and PD15 in output pushpull mode */
+	GPIO_InitStructure.GPIO_Pin = LED4_PIN | LED3_PIN | LED5_PIN | LED6_PIN;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_Init(GPIOD, &GPIO_InitStructure);
+	volatile uint32_t i = 0;
+	while (1)
+	{
+		i++;
+
+		GPIO_ResetBits(GPIOD, LED4_PIN | LED3_PIN | LED5_PIN | LED6_PIN);
+		Delay(0x01FFFF);
+		GPIO_SetBits(GPIOD, LED3_PIN);
+		Delay(0x0FFFFF);
+		GPIO_SetBits(GPIOD, LED4_PIN);
+		Delay(0x0FFFFF);
+		GPIO_SetBits(GPIOD, LED5_PIN);
+		Delay(0x0FFFFF);
+		GPIO_SetBits(GPIOD, LED6_PIN);
+		Delay(0x0FFFFF);
+
+	}
+	return 0;
+}
